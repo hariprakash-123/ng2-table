@@ -21,7 +21,8 @@ export class TableDemoComponent implements OnInit {
     {title: 'Office', className: ['office-header', 'text-success'], name: 'office', sort: 'asc'},
     {title: 'Extn.', name: 'ext', sort: '', filtering: {filterString: '', placeholder: 'Filter by extn.'}},
     {title: 'Start date', className: 'text-warning', name: 'startDate'},
-    {title: 'Salary ($)', name: 'salary'}
+    {title: 'Salary ($)', name: 'salary'},
+    {title: 'Actions', links: ['View', 'Delete']}
   ];
   public page:number = 1;
   public itemsPerPage:number = 10;
@@ -106,7 +107,7 @@ export class TableDemoComponent implements OnInit {
     filteredData.forEach((item:any) => {
       let flag = false;
       this.columns.forEach((column:any) => {
-        if (item[column.name].toString().match(this.config.filtering.filterString)) {
+        if (item[column.name] && item[column.name].toString().match(this.config.filtering.filterString)) {
           flag = true;
         }
       });
@@ -135,6 +136,10 @@ export class TableDemoComponent implements OnInit {
   }
 
   public onCellClick(data: any): any {
+    console.log(data);
+  }
+
+  public handleLinks(data:any): any {
     console.log(data);
   }
 }

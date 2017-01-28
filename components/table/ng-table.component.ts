@@ -8,26 +8,43 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
            role="grid" style="width: 100%;">
       <thead>
         <tr role="row">
-          <th *ngFor="let column of columns" [ngTableSorting]="config" [column]="column" 
+          <ng-container *ngFor="let column of columns">
+              <th *ngIf="column.title != 'Actions'" [ngTableSorting]="config" [column]="column" 
               (sortChanged)="onChangeTable($event)" ngClass="{{column.className || ''}}">
-            {{column.title}}
-            <i *ngIf="config && column.sort" class="pull-right fa"
-              [ngClass]="{'fa-chevron-down': column.sort === 'desc', 'fa-chevron-up': column.sort === 'asc'}"></i>
-          </th>
+                {{column.title}}
+                <i *ngIf="config && column.sort" class="pull-right fa"
+                  [ngClass]="{'fa-chevron-down': column.sort === 'desc', 'fa-chevron-up': column.sort === 'asc'}"></i>
+              </th>
+              <th *ngIf="column.title === 'Actions'" ngClass="{{ column.className || '' }}">
+                {{ column.title }}
+              </th>
+          </ng-container>
         </tr>
       </thead>
       <tbody>
       <tr *ngIf="showFilterRow">
-        <td *ngFor="let column of columns">
-          <input *ngIf="column.filtering" placeholder="{{column.filtering.placeholder}}"
-                 [ngTableFiltering]="column.filtering"
-                 class="form-control"
-                 style="width: auto;"
-                 (tableChanged)="onChangeTable(config)"/>
-        </td>
+        <ng-container *ngFor="let column of columns">
+          <td *ngIf="column.title != 'Actions'"> 
+            <input *ngIf="column.filtering" placeholder="{{column.filtering.placeholder}}"
+                   [ngTableFiltering]="column.filtering"
+                   class="form-control"
+                   style="width: auto;"
+                  (tableChanged)="onChangeTable(config)"/>
+          </td>
+          <td *ngIf="column.title === 'Actions'">
+          </td>
+        </ng-container>
       </tr>
         <tr *ngFor="let row of rows">
-          <td (click)="cellClick(row, column.name)" *ngFor="let column of columns" [innerHtml]="sanitize(getData(row, column.name))"></td>
+          <ng-container *ngFor="let column of columns">
+            <td (click)="cellClick(row, column.name)" *ngIf="column.title != 'Actions'" [innerHtml]="sanitize(getData(row, column.name))"></td>
+            <td *ngIf="column.title === 'Actions'">
+                <a class="mx-auto" *ngFor="let link of column.links" 
+                  (click)="handleLinks(link, row, column)">
+                  {{ link }}
+                </a>
+            </td>
+          </ng-container>
         </tr>
       </tbody>
     </table>
@@ -51,6 +68,7 @@ export class NgTableComponent {
   // Outputs (Events)
   @Output() public tableChanged:EventEmitter<any> = new EventEmitter();
   @Output() public cellClicked:EventEmitter<any> = new EventEmitter();
+  @Output() public linkClicked:EventEmitter<any> = new EventEmitter();
 
   public showFilterRow:Boolean = false;
 
@@ -118,5 +136,9 @@ export class NgTableComponent {
 
   public cellClick(row:any, column:any):void {
     this.cellClicked.emit({row, column});
+  }
+
+  public handleLinks(action:string, row:any, column:any): void {
+    this.linkClicked.emit({action, row, column});
   }
 }

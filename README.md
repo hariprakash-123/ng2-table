@@ -58,11 +58,14 @@ Follow me [![twitter](https://img.shields.io/twitter/follow/valorkin.svg?style=s
     - `filtering` (`?any`) - switch on the filtering plugin
       - `filterString` (`string`) - the default value for filter
       - `columnName` (`string`) - the property name in raw data
+    - `links` (array of strings containing the links to display) - Contains the links that need to be shown. If this is setup, then the title of the column must be "Actions". Please refer to
+      the example to see how its done
 
 ### Outputs (Events)
 
 - `tableChanged`: data change event handler
 - `cellClicked`: onclick event handler
+- `linkClicked`: Event Handler when a link is clicked. Contains the Link name, row, column
 
 ### Filter
 
@@ -79,7 +82,9 @@ Data sorting could be in 3 modes: asc, desc and without sorting data (as it come
 
 Pagination could be used from [ng2-bootstrap](https://github.com/valor-software/ng2-bootstrap) - [pagination component](http://valor-software.github.io/ng2-bootstrap/#pagination). When the page is changed, the pagination component will emit event `change-table` with an object {page, itemsPerPage}. Then you can easily subscribe on it and request corresponding raw data.
 
+### Links
 
+If you want to display Links, the title of the column must be called "Actions" and an additional property called `links` available which is an array of strings for the links to display
 ## Troubleshooting
 
 Please follow this guidelines when reporting bugs and feature requests:
