@@ -3,7 +3,7 @@ gulp-tasks
 logs
 
 # typings
-typings
+#typings
 
 # testing
 karma.conf.js
@@ -16,10 +16,10 @@ demo-build
 webpack.config.js
 
 #typescript sources
-*.ts
-*.js.map
-!*.d.ts
-/components/**/*.ts
-!/components/**/*.d.ts
+#*.ts
+#*.js.map
+#!*.d.ts
+#/components/**/*.ts
+#!/components/**/*.d.ts
 
 factories
