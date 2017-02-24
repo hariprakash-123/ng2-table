@@ -25,11 +25,17 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
       <tr *ngIf="showFilterRow">
         <ng-container *ngFor="let column of columns">
           <td *ngIf="column.title != 'Actions'"> 
-            <input *ngIf="column.filtering" placeholder="{{column.filtering.placeholder}}"
+             <input *ngIf="column.filtering && column.filtering.inputType == 'text'" placeholder="{{column.filtering.placeholder}}"
                    [ngTableFiltering]="column.filtering"
                    class="form-control"
                    style="width: auto;"
                   (tableChanged)="onChangeTable(config)"/>
+                  
+            <select [ngTableFiltering]="column.filtering" class="form-control"
+             (tableChanged)="onChangeTable(config)" 
+             *ngIf="column.filtering && column.filtering.inputType == 'select'">
+                <option *ngFor="let obj of column.filtering.options" [value]="obj.id">{{obj.value}}</option>
+            </select>
           </td>
           <td *ngIf="column.title === 'Actions'">
           </td>
