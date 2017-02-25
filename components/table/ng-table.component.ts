@@ -22,7 +22,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
         </tr>
       </thead>
       <tbody>
-      <tr *ngIf="showFilterRow">
+      <tr *ngIf="showFilterRow" class="search-title-section">
         <ng-container *ngFor="let column of columns">
           <td *ngIf="column.title != 'Actions'"> 
              <input *ngIf="column.filtering && column.filtering.inputType == 'text'" placeholder="{{column.filtering.placeholder}}"
