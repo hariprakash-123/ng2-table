@@ -49,10 +49,12 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
                   <button class="actions-button btn" *ngFor="let link of column.links" title="{{ link }}"
                   [ngClass]="{'btn-info': link=='View', 
                   'btn-warning': link=='Edit', 'btn-danger': link=='Delete'}"
+                  'btn-sm btn-link': link!='View' && link!='Edit' && link!='Delete'}"
                     (click)="handleLinks(link, row, column)">
                     <i *ngIf="link=='View'" class="fa fa-eye"></i>
                     <i *ngIf="link=='Edit'" class="fa fa-edit"></i>
                     <i *ngIf="link=='Delete'" class="fa fa-remove"></i>
+                    <span *ngIf="link!='View' && link!='Edit' && link!='Delete'">{{link}}</span>
                   </button>
                 </div>
             </td>
