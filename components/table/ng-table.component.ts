@@ -48,7 +48,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
                 <div class="input-group-btn">
                   <button class="actions-button btn" *ngFor="let link of column.links" title="{{ link }}"
                   [ngClass]="{'btn-info': link=='View', 
-                  'btn-warning': link=='Edit', 'btn-danger': link=='Delete'}"
+                  'btn-warning': link=='Edit', 'btn-danger': link=='Delete',
                   'btn-sm btn-link': link!='View' && link!='Edit' && link!='Delete'}"
                     (click)="handleLinks(link, row, column)">
                     <i *ngIf="link=='View'" class="fa fa-eye"></i>
