@@ -48,8 +48,8 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
                 <div class="input-group-btn">
                   <button class="actions-button btn {{link.mainClass}}" *ngFor="let link of column.links" title="{{ link.name }}"
                     (click)="handleLinks(link.name, row, column)">
-                    <i *ngIf="link.mainClass!=''" class="{{link.iconClass}}"></i>
-                    <span *ngIf="link.mainClass==''">{{link.name}}</span>
+                    <i *ngIf="link.iconClass!=''" class="{{link.iconClass}}"></i>
+                    <span *ngIf="link.iconClass==''">{{link.name}}</span>
                   </button>
                 </div>
             </td>
