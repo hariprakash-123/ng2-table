@@ -46,15 +46,10 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
             <td (click)="cellClick(row, column.name)" *ngIf="column.title != 'Actions'" [innerHtml]="sanitize(getData(row, column.name))"></td>
             <td *ngIf="column.title === 'Actions'">
                 <div class="input-group-btn">
-                  <button class="actions-button btn" *ngFor="let link of column.links" title="{{ link }}"
-                  [ngClass]="{'btn-info': link=='View', 
-                  'btn-warning': link=='Edit', 'btn-danger': link=='Delete',
-                  'btn-sm btn-link': link!='View' && link!='Edit' && link!='Delete'}"
-                    (click)="handleLinks(link, row, column)">
-                    <i *ngIf="link=='View'" class="fa fa-eye"></i>
-                    <i *ngIf="link=='Edit'" class="fa fa-edit"></i>
-                    <i *ngIf="link=='Delete'" class="fa fa-remove"></i>
-                    <span *ngIf="link!='View' && link!='Edit' && link!='Delete'">{{link}}</span>
+                  <button class="actions-button btn {{link.mainClass}}" *ngFor="let link of column.links" title="{{ link.name }}"
+                    (click)="handleLinks(link.name, row, column)">
+                    <i *ngIf="link.mainClass!=''" class="{{link.iconClass}}"></i>
+                    <span *ngIf="link.mainClass==''">{{link.name}}</span>
                   </button>
                 </div>
             </td>
