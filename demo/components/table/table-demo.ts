@@ -35,7 +35,8 @@ export class TableDemoComponent implements OnInit {
     sorting: { columns: this.columns },
     filtering: { filterString: '' },
     className: ['table-striped', 'table-bordered'],
-    multiSelect: true
+    multiSelect: true,
+    checkboxRule: '<salary> > 200'
   };
 
   private data: Array<any> = TableData;

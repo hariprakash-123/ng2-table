@@ -44,7 +44,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
         </ng-container>
       </tr>
         <tr *ngFor="let row of rows; let i = index">
-          <td *ngIf="config['multiSelect']"><input type="checkbox" [checked]="selectedRowIndexes.indexOf(i) >=0? 'checked': null" (change)="toggleSelect(i)" /></td>
+          <td *ngIf="config['multiSelect']"><input type="checkbox" [checked]="selectedRowIndexes.indexOf(i) >=0? 'checked': null" (change)="toggleSelect(i)" [disabled]="disabledRowIndexes.indexOf(i) >= 0"/></td>
 
           <ng-container *ngFor="let column of columns">
             <td (click)="cellClick(row, column.name)" *ngIf="column.title != 'Actions'" [innerHtml]="sanitize(getData(row, column.name))"></td>
@@ -64,8 +64,6 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
   `
 })
 export class NgTableComponent {
-  // Table values
-  @Input() public rows: Array<any> = [];
 
   @Input()
   public set config(conf: any) {
@@ -76,6 +74,15 @@ export class NgTableComponent {
       conf.className = conf.className.join(' ');
     }
     this._config = conf;
+  }
+
+  // Table values
+  public rows: Array<any> = [];
+
+  @Input('rows')
+  set rowsData(data: Array<any>) {
+    this.rows = data;
+    this.defineCheckboxesState();
   }
 
   // Outputs (Events)
@@ -102,6 +109,8 @@ export class NgTableComponent {
         this._columns.push(value);
       }
     });
+
+    this.defineCheckboxesState();
   }
 
   private _columns: Array<any> = [];
@@ -156,8 +165,42 @@ export class NgTableComponent {
   }
 
   // Multi select configs
+  public disabledRowIndexes: Array<number> = [];
   public selectedRowIndexes: Array<number> = [];
   @Output() public selectedRecords: EventEmitter<Array<any>> = new EventEmitter();
+
+  public defineCheckboxesState() {
+    let columnNames: Array<string> = this._columns.map(item => item['name']);
+
+    if (this.rows.length > 0 && columnNames.length > 0 && this._config && this._config['multiSelect'] && this._config['checkboxRule']) {
+
+      this.rows.forEach((row, index) => {
+
+        // Replacing field names with their values in checkbox rule
+        let equation = this._config['checkboxRule'].replace(/\<(.*?)\>/g, (match: string, name: string) => {
+          if (columnNames.indexOf(name) >= 0) {
+            return row[name];
+          } else {
+            return null;
+          }
+        });
+
+        // Checking for syntax errors
+        try {
+          var result: any = eval(equation);
+        } catch (e) {
+          // If has syntax errors then previous value of the field will be assigned
+          if (e instanceof SyntaxError) {
+            alert(e.message);
+            var result: any = false;
+          }
+        }
+
+        if (!result) { this.disabledRowIndexes.push(index); }
+      });
+
+    }
+  }
 
   public toggleSelect(rowIndex?: number) {
     if (rowIndex || rowIndex >= 0) {
@@ -170,7 +213,10 @@ export class NgTableComponent {
       if (this.selectedRowIndexes.length > 0 && this.selectedRowIndexes.length == this.rows.length) {
         this.selectedRowIndexes = [];
 
-      } else { this.selectedRowIndexes = this.rows.map((item, index) => index); }
+      } else {
+        let filtered: Array<any> = this.rows.filter((row, index) => this.disabledRowIndexes.indexOf(index) < 0);
+        this.selectedRowIndexes = filtered.map((item, index) => index);
+      }
     }
 
     this.selectedRowIndexes = this.selectedRowIndexes.sort();
