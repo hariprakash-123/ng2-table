@@ -48,6 +48,7 @@ Follow me [![twitter](https://img.shields.io/twitter/follow/valorkin.svg?style=s
     - `filterString` (`string`) - the default value for filter
     - `columnName` (`string`) - the property name in raw data
   - `className` (`string|Array<string>`) - additional CSS classes that should be added to a <table>
+  - `multiSelect` (`?boolean`) - Enables select checkboxes
 
 - `rows` (`?Array<any>`) - only list of the rows which should be displayed
 - `columns` (`?Array<any>`) - config for columns (+ sorting settings if it's needed)
@@ -66,6 +67,7 @@ Follow me [![twitter](https://img.shields.io/twitter/follow/valorkin.svg?style=s
 - `tableChanged`: data change event handler
 - `cellClicked`: onclick event handler
 - `linkClicked`: Event Handler when a link is clicked. Contains the Link name, row, column
+- `selectedRecords`: Event handler to emit selected records
 
 ### Filter
 
