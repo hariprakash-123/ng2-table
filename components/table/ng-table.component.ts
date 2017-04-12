@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
@@ -69,7 +69,6 @@ export class NgTableComponent {
 
   @Input()
   public set config(conf: any) {
-    console.log(conf)
     if (!conf.className) {
       conf.className = 'table-striped table-bordered';
     }
@@ -158,16 +157,20 @@ export class NgTableComponent {
 
   // Multi select configs
   public selectedRowIndexes: Array<number> = [];
-  @Output() selectedRecords: EventEmitter<Array<any>> = new EventEmitter();
+  @Output() public selectedRecords: EventEmitter<Array<any>> = new EventEmitter();
 
   public toggleSelect(rowIndex?: number) {
     if (rowIndex || rowIndex >= 0) {
-      if (this.selectedRowIndexes.indexOf(rowIndex) >= 0) this.selectedRowIndexes.splice(this.selectedRowIndexes.indexOf(rowIndex), 1);
-      else this.selectedRowIndexes.push(rowIndex);
-    }
-    else {
-      if (this.selectedRowIndexes.length > 0 && this.selectedRowIndexes.length == this.rows.length) this.selectedRowIndexes = [];
-      else this.selectedRowIndexes = this.rows.map((item, index) => index);
+      if (this.selectedRowIndexes.indexOf(rowIndex) >= 0) {
+        this.selectedRowIndexes.splice(this.selectedRowIndexes.indexOf(rowIndex), 1);
+
+      } else { this.selectedRowIndexes.push(rowIndex); }
+
+    } else {
+      if (this.selectedRowIndexes.length > 0 && this.selectedRowIndexes.length == this.rows.length) {
+        this.selectedRowIndexes = [];
+
+      } else { this.selectedRowIndexes = this.rows.map((item, index) => index); }
     }
 
     this.selectedRowIndexes = this.selectedRowIndexes.sort();

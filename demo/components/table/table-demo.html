@@ -23,6 +23,6 @@
             [rotate]="false"
             (pageChanged)="onChangeTable(config, $event)"
             (numPages)="numPages = $event"
-            (selectedRecords)="selected($event)">
+            (selectedRecords)="selectedRows($event)">
 </pagination>
 <pre *ngIf="config.paging" class="card card-block card-header">Page: {{page}} / {{numPages}}</pre>
