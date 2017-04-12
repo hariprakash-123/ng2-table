@@ -40,7 +40,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/valor-software/ng2-table.git"
+    "url": "git+ssh://git@github.com/santhakumarp/ng2-table.git#developement"
   },
   "bugs": {
     "url": "https://github.com/valor-software/ng2-table/issues"

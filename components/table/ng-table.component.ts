@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
@@ -8,6 +8,8 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
            role="grid" style="width: 100%;">
       <thead>
         <tr role="row">
+          <th *ngIf="config && config['multiSelect']"><input type="checkbox" [checked]="selectedRowIndexes.length == rows.length? 'checked': null" (change)="toggleSelect()"/></th>
+
           <ng-container *ngFor="let column of columns">
               <th *ngIf="column.title != 'Actions'" [ngTableSorting]="config" [column]="column" 
               (sortChanged)="onChangeTable($event)" ngClass="{{column.className || ''}}">
@@ -41,7 +43,9 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
           </td>
         </ng-container>
       </tr>
-        <tr *ngFor="let row of rows">
+        <tr *ngFor="let row of rows; let i = index">
+          <td *ngIf="config['multiSelect']"><input type="checkbox" [checked]="selectedRowIndexes.indexOf(i) >=0? 'checked': null" (change)="toggleSelect(i)" /></td>
+
           <ng-container *ngFor="let column of columns">
             <td (click)="cellClick(row, column.name)" *ngIf="column.title != 'Actions'" [innerHtml]="sanitize(getData(row, column.name))"></td>
             <td *ngIf="column.title === 'Actions'">
@@ -61,10 +65,11 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 })
 export class NgTableComponent {
   // Table values
-  @Input() public rows:Array<any> = [];
+  @Input() public rows: Array<any> = [];
 
   @Input()
-  public set config(conf:any) {
+  public set config(conf: any) {
+    console.log(conf)
     if (!conf.className) {
       conf.className = 'table-striped table-bordered';
     }
@@ -75,22 +80,22 @@ export class NgTableComponent {
   }
 
   // Outputs (Events)
-  @Output() public tableChanged:EventEmitter<any> = new EventEmitter();
-  @Output() public cellClicked:EventEmitter<any> = new EventEmitter();
-  @Output() public linkClicked:EventEmitter<any> = new EventEmitter();
+  @Output() public tableChanged: EventEmitter<any> = new EventEmitter();
+  @Output() public cellClicked: EventEmitter<any> = new EventEmitter();
+  @Output() public linkClicked: EventEmitter<any> = new EventEmitter();
 
-  public showFilterRow:Boolean = false;
+  public showFilterRow: Boolean = false;
 
   @Input()
-  public set columns(values:Array<any>) {
-    values.forEach((value:any) => {
+  public set columns(values: Array<any>) {
+    values.forEach((value: any) => {
       if (value.filtering) {
         this.showFilterRow = true;
       }
       if (value.className && value.className instanceof Array) {
         value.className = value.className.join(' ');
       }
-      let column = this._columns.find((col:any) => col.name === value.name);
+      let column = this._columns.find((col: any) => col.name === value.name);
       if (column) {
         Object.assign(column, value);
       }
@@ -100,54 +105,78 @@ export class NgTableComponent {
     });
   }
 
-  private _columns:Array<any> = [];
-  private _config:any = {};
+  private _columns: Array<any> = [];
+  private _config: any = {};
 
-  public constructor(private sanitizer:DomSanitizer) {
+  public constructor(private sanitizer: DomSanitizer) {
   }
 
-  public sanitize(html:string):SafeHtml {
+  public sanitize(html: string): SafeHtml {
     return this.sanitizer.bypassSecurityTrustHtml(html);
   }
 
-  public get columns():Array<any> {
+  public get columns(): Array<any> {
     return this._columns;
   }
 
-  public get config():any {
+  public get config(): any {
     return this._config;
   }
 
-  public get configColumns():any {
-    let sortColumns:Array<any> = [];
+  public get configColumns(): any {
+    let sortColumns: Array<any> = [];
 
-    this.columns.forEach((column:any) => {
+    this.columns.forEach((column: any) => {
       if (column.sort) {
         sortColumns.push(column);
       }
     });
 
-    return {columns: sortColumns};
+    return { columns: sortColumns };
   }
 
-  public onChangeTable(column:any):void {
-    this._columns.forEach((col:any) => {
+  public onChangeTable(column: any): void {
+    this._columns.forEach((col: any) => {
       if (col.name !== column.name && col.sort !== false) {
         col.sort = '';
       }
     });
-    this.tableChanged.emit({sorting: this.configColumns});
+    this.tableChanged.emit({ sorting: this.configColumns });
   }
 
-  public getData(row:any, propertyName:string):string {
-    return propertyName.split('.').reduce((prev:any, curr:string) => prev[curr], row);
+  public getData(row: any, propertyName: string): string {
+    return propertyName.split('.').reduce((prev: any, curr: string) => prev[curr], row);
   }
 
-  public cellClick(row:any, column:any):void {
-    this.cellClicked.emit({row, column});
+  public cellClick(row: any, column: any): void {
+    this.cellClicked.emit({ row, column });
   }
 
-  public handleLinks(action:string, row:any, column:any): void {
-    this.linkClicked.emit({action, row, column});
+  public handleLinks(action: string, row: any, column: any): void {
+    this.linkClicked.emit({ action, row, column });
   }
+
+  // Multi select configs
+  public selectedRowIndexes: Array<number> = [];
+  @Output() selectedRecords: EventEmitter<Array<any>> = new EventEmitter();
+
+  public toggleSelect(rowIndex?: number) {
+    if (rowIndex || rowIndex >= 0) {
+      if (this.selectedRowIndexes.indexOf(rowIndex) >= 0) this.selectedRowIndexes.splice(this.selectedRowIndexes.indexOf(rowIndex), 1);
+      else this.selectedRowIndexes.push(rowIndex);
+    }
+    else {
+      if (this.selectedRowIndexes.length > 0 && this.selectedRowIndexes.length == this.rows.length) this.selectedRowIndexes = [];
+      else this.selectedRowIndexes = this.rows.map((item, index) => index);
+    }
+
+    this.selectedRowIndexes = this.selectedRowIndexes.sort();
+    this.emitSelected();
+  }
+
+  public emitSelected() {
+    let records: Array<any> = this.rows.filter((item, index) => this.selectedRowIndexes.indexOf(index) >= 0);
+    this.selectedRecords.emit(records);
+  }
+
 }

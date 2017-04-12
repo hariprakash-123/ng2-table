@@ -34,7 +34,8 @@ export class TableDemoComponent implements OnInit {
     paging: true,
     sorting: {columns: this.columns},
     filtering: {filterString: ''},
-    className: ['table-striped', 'table-bordered']
+    className: ['table-striped', 'table-bordered'],
+    multiSelect: true
   };
 
   private data:Array<any> = TableData;
@@ -141,5 +142,9 @@ export class TableDemoComponent implements OnInit {
 
   public handleLinks(data:any): any {
     console.log(data);
+  }
+
+  public selected(data: any){
+    console.log(data)
   }
 }
