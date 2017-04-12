@@ -11,7 +11,8 @@
           (tableChanged)="onChangeTable(config)"
           (cellClicked)="onCellClick($event)"
           (linkClicked)="handleLinks($event)"
-          [rows]="rows" [columns]="columns">
+          [rows]="rows" [columns]="columns"
+          (selectedRecords)="selectedRows($event)">
 </ng-table>
 <pagination *ngIf="config.paging"
             class="pagination-sm"
@@ -22,7 +23,6 @@
             [boundaryLinks]="true"
             [rotate]="false"
             (pageChanged)="onChangeTable(config, $event)"
-            (numPages)="numPages = $event"
-            (selectedRecords)="selectedRows($event)">
+            (numPages)="numPages = $event">
 </pagination>
 <pre *ngIf="config.paging" class="card card-block card-header">Page: {{page}} / {{numPages}}</pre>

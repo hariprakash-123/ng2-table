@@ -49,6 +49,7 @@ Follow me [![twitter](https://img.shields.io/twitter/follow/valorkin.svg?style=s
     - `columnName` (`string`) - the property name in raw data
   - `className` (`string|Array<string>`) - additional CSS classes that should be added to a <table>
   - `multiSelect` (`?boolean`) - Enables select checkboxes
+  - `checkboxRule` (`?string`) - Boolean expression to enable checkboxes, If not given all checkboxes will be enabled
 
 - `rows` (`?Array<any>`) - only list of the rows which should be displayed
 - `columns` (`?Array<any>`) - config for columns (+ sorting settings if it's needed)
