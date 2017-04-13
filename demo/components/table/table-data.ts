@@ -5,7 +5,8 @@ export const TableData:Array<any> = [
     'office': 'Croatia',
     'ext': `<strong>0839</strong>`,
     'startDate': '2015/08/19',
-    'salary': 208.178
+    'salary': 208.178,
+    'additional_info': {'city': 'Busan'}
   }, {
     'name': 'Pearl Crosby',
     'position': 'In PC',

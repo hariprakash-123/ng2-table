@@ -36,7 +36,7 @@ export class TableDemoComponent implements OnInit {
     filtering: { filterString: '' },
     className: ['table-striped', 'table-bordered'],
     multiSelect: true,
-    checkboxRule: '<salary> > 200'
+    checkboxRule: '"<additional_info.city>" == "Busan"'
   };
 
   private data: Array<any> = TableData;

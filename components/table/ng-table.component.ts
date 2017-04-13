@@ -175,28 +175,34 @@ export class NgTableComponent {
     if (this.rows.length > 0 && columnNames.length > 0 && this._config && this._config['multiSelect'] && this._config['checkboxRule']) {
 
       this.rows.forEach((row, index) => {
+        let keys: Array<string> = Object.keys(row);
 
         // Replacing field names with their values in checkbox rule
         let equation = this._config['checkboxRule'].replace(/\<(.*?)\>/g, (match: string, name: string) => {
-          if (columnNames.indexOf(name) >= 0) {
-            return row[name];
+          let sigments: Array<string> = name.split('.');
+
+          if (keys.indexOf(sigments[0]) >= 0) {
+            let exp: string = `row['${sigments.join("']['")}']`;
+
+            try { return eval(exp); } catch (e) { alert(`Failed to evaluate expression "${exp}"`); }
           } else {
             return null;
           }
         });
 
         // Checking for syntax errors
+        let evalResult: any;
         try {
-          var result: any = eval(equation);
+          evalResult = eval(equation);
         } catch (e) {
           // If has syntax errors then previous value of the field will be assigned
           if (e instanceof SyntaxError) {
             alert(`Failed to evaluate expression "${equation}"`);
-            var result: any = false;
+            evalResult = false;
           }
         }
 
-        if (!result) { this.disabledRowIndexes.push(index); }
+        if (!evalResult) { this.disabledRowIndexes.push(index); }
       });
 
     }
