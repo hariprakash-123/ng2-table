@@ -21,7 +21,7 @@ export class TableDemoComponent implements OnInit {
     { title: 'Office', className: ['office-header', 'text-success'], name: 'office', sort: 'asc' },
     { title: 'Extn.', name: 'ext', sort: '', filtering: { filterString: '', placeholder: 'Filter by extn.' } },
     { title: 'Start date', className: 'text-warning', name: 'startDate' },
-    { title: 'Salary ($)', name: 'salary' },
+    { title: 'Salary ($)', name: 'salary', edit: true, type: 'number' },
     { title: 'Actions', links: ['View', 'Delete'] }
   ];
   public page: number = 1;
@@ -147,5 +147,9 @@ export class TableDemoComponent implements OnInit {
 
   public selectedRows(data: any) {
     console.log(data);
+  }
+
+  public updateValues(event: any, x: any){
+    console.log(event);
   }
 }

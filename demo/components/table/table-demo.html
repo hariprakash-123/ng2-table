@@ -12,7 +12,8 @@
           (cellClicked)="onCellClick($event)"
           (linkClicked)="handleLinks($event)"
           [rows]="rows" [columns]="columns"
-          (selectedRecords)="selectedRows($event)">
+          (selectedRecords)="selectedRows($event)"
+          (valueChanges)="updateValues($event)">
 </ng-table>
 <pagination *ngIf="config.paging"
             class="pagination-sm"

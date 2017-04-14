@@ -62,6 +62,8 @@ Follow me [![twitter](https://img.shields.io/twitter/follow/valorkin.svg?style=s
       - `columnName` (`string`) - the property name in raw data
     - `links` (array of strings containing the links to display) - Contains the links that need to be shown. If this is setup, then the title of the column must be "Actions". Please refer to
       the example to see how its done
+    - `edit` (`boolean`) - Editable 
+    - `type` (`string`) - Type of input of editable cell
 
 ### Outputs (Events)
 
@@ -69,6 +71,7 @@ Follow me [![twitter](https://img.shields.io/twitter/follow/valorkin.svg?style=s
 - `cellClicked`: onclick event handler
 - `linkClicked`: Event Handler when a link is clicked. Contains the Link name, row, column
 - `selectedRecords`: Event handler to emit selected records
+- `valueChanges`: Event handler to emit changed value details on cell input changes
 
 ### Filter
 

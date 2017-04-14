@@ -4,7 +4,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 @Component({
   selector: 'ng-table',
   template: `
-    <table class="table dataTable" ngClass="{{config.className || ''}}"
+   <table class="table dataTable" ngClass="{{config.className || ''}}"
            role="grid" style="width: 100%;">
       <thead>
         <tr role="row">
@@ -47,7 +47,10 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
           <td *ngIf="config['multiSelect']"><input type="checkbox" [checked]="selectedRowIndexes.indexOf(i) >=0? 'checked': null" (change)="toggleSelect($event, i)" [disabled]="disabledRowIndexes.indexOf(i) >= 0"/></td>
 
           <ng-container *ngFor="let column of columns">
-            <td (click)="cellClick(row, column.name)" *ngIf="column.title != 'Actions'" [innerHtml]="sanitize(getData(row, column.name))"></td>
+            <td (click)="cellClick(row, column.name)" *ngIf="column.title != 'Actions' && !column.edit" [innerHtml]="sanitize(getData(row, column.name))"></td>
+            <td *ngIf="column.edit">
+                <input (keyup)="valueChanged($event.target.value, column.name, i)" (change)="valueChanged($event.target.value, column.name, i)" [type]="column.type" [value]="getData(row, column.name)" />
+            </td>
             <td *ngIf="column.title === 'Actions'">
                 <div class="input-group-btn">
                   <button class="actions-button btn {{link.mainClass}}" *ngFor="let link of column.links" title="{{ link.name }}"
@@ -233,6 +236,15 @@ export class NgTableComponent {
   public emitSelected() {
     let records: Array<any> = this.rows.filter((item, index) => this.selectedRowIndexes.indexOf(index) >= 0);
     this.selectedRecords.emit(records);
+  }
+
+
+  // Editable cells
+  @Output() valueChanges: EventEmitter<any> = new EventEmitter();
+
+  valueChanged(value: any, propertyName: string, rowIndex: number) {
+    this.rows[rowIndex][propertyName] = value;
+    this.valueChanges.emit({'value': value, 'property':propertyName, 'row':this.rows[rowIndex]})
   }
 
 }
