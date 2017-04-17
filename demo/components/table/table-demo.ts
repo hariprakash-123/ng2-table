@@ -149,7 +149,7 @@ export class TableDemoComponent implements OnInit {
     console.log(data);
   }
 
-  public updateValues(event: any, x: any){
+  public updateValues(event: any){
     console.log(event);
   }
 }

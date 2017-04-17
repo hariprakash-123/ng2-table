@@ -83,7 +83,7 @@ export class NgTableComponent {
   public rows: Array<any> = [];
 
   @Input('rows')
-  set rowsData(data: Array<any>) {
+  public set rowsData(data: Array<any>) {
     this.rows = data;
     this.defineCheckboxesState();
   }
@@ -189,7 +189,7 @@ export class NgTableComponent {
 
             try { return eval(exp); } catch (e) { alert(`Failed to evaluate expression "${exp}"`); }
           } else {
-            return null;
+            return undefined;
           }
         });
 
@@ -240,11 +240,11 @@ export class NgTableComponent {
 
 
   // Editable cells
-  @Output() valueChanges: EventEmitter<any> = new EventEmitter();
+  @Output() public valueChanges: EventEmitter<any> = new EventEmitter();
 
-  valueChanged(value: any, propertyName: string, rowIndex: number) {
+  public valueChanged(value: any, propertyName: string, rowIndex: number) {
     this.rows[rowIndex][propertyName] = value;
-    this.valueChanges.emit({'value': value, 'property':propertyName, 'row':this.rows[rowIndex]})
+    this.valueChanges.emit({'value': value, 'property':propertyName, 'row':this.rows[rowIndex]});
   }
 
 }
