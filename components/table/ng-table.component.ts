@@ -173,7 +173,7 @@ export class NgTableComponent {
   @Output() public selectedRecords: EventEmitter<any> = new EventEmitter();
 
   public defineCheckboxesState() {
-    this.disabledRowIndexes = [];
+    this.reset();
     let columnNames: Array<string> = this._columns.map(item => item['name']);
 
     if (this.rows.length > 0 && columnNames.length > 0 && this._config && this._config['multiSelect'] && this._config['checkboxRule']) {
@@ -239,6 +239,10 @@ export class NgTableComponent {
     this.selectedRecords.emit(records);
   }
 
+  public reset(){
+      this.disabledRowIndexes = [];
+      this.selectedRowIndexes = [];
+  }
 
   // Editable cells
   @Output() public valueChanges: EventEmitter<any> = new EventEmitter();
