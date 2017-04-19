@@ -52,6 +52,7 @@ Follow me [![twitter](https://img.shields.io/twitter/follow/valorkin.svg?style=s
   - `checkboxRule` (`?string`) - Boolean expression to enable checkboxes, If not given all checkboxes will be enabled
 
 - `rows` (`?Array<any>`) - only list of the rows which should be displayed
+  - `is_disabled` (`?boolean`) - Disables row action buttons
 - `columns` (`?Array<any>`) - config for columns (+ sorting settings if it's needed)
     - `title` (`string`) - the title of column header
     - `name` (`string`) - the property name in data

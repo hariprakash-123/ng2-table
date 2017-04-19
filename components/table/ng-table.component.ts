@@ -43,7 +43,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
           </td>
         </ng-container>
       </tr>
-        <tr *ngFor="let row of rows; let i = index">
+        <tr *ngFor="let row of rows; let i = index" [ngClass]="{'row-disabled': row.is_disabled}">
           <td *ngIf="config['multiSelect']"><input type="checkbox" [checked]="selectedRowIndexes.indexOf(i) >=0? 'checked': null" (change)="toggleSelect($event, i)" [disabled]="disabledRowIndexes.indexOf(i) >= 0"/></td>
 
           <ng-container *ngFor="let column of columns">
@@ -53,7 +53,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
             </td>
             <td *ngIf="column.title === 'Actions'">
                 <div class="input-group-btn">
-                  <button class="actions-button btn {{link.mainClass}}" *ngFor="let link of column.links" title="{{ link.name }}"
+                  <button [disabled]="row.is_disabled" class="actions-button btn {{link.mainClass}}" *ngFor="let link of column.links" title="{{ link.name }}"
                     (click)="handleLinks(link.name, row, column)">
                     <i *ngIf="link.iconClass!=''" class="{{link.iconClass}}"></i>
                     <span *ngIf="link.iconClass==''">{{link.name}}</span>
