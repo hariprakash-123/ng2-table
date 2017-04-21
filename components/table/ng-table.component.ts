@@ -47,9 +47,9 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
           <td *ngIf="config['multiSelect']"><input type="checkbox" [checked]="selectedRowIndexes.indexOf(i) >=0? 'checked': null" (change)="toggleSelect($event, i)" [disabled]="disabledRowIndexes.indexOf(i) >= 0"/></td>
 
           <ng-container *ngFor="let column of columns">
-            <td (click)="cellClick(row, column.name)" *ngIf="column.title != 'Actions' && !column.edit" [innerHtml]="sanitize(getData(row, column.name))"></td>
+            <td (click)="cellClick(row, column.name)" *ngIf="column.title != 'Actions' && !column.edit" [innerHtml]="sanitize(getData(row, column))"></td>
             <td *ngIf="column.edit">
-                <input (keyup)="valueChanged($event.target.value, column.name, i)" (change)="valueChanged($event.target.value, column.name, i)" [type]="column.type" [value]="getData(row, column.name)" />
+                <input (keyup)="valueChanged($event.target.value, column.name, i)" (change)="valueChanged($event.target.value, column.name, i)" [type]="column.type" [value]="getData(row, column)" />
             </td>
             <td *ngIf="column.title === 'Actions'">
                 <div class="input-group-btn">
@@ -155,8 +155,24 @@ export class NgTableComponent {
     this.tableChanged.emit({ sorting: this.configColumns });
   }
 
-  public getData(row: any, propertyName: string): string {
-    return propertyName.split('.').reduce((prev: any, curr: string) => prev[curr], row);
+  public getData(row: any, columnProperties: any): string {
+    let propertyName: string = columnProperties['name'];
+    let value: any = propertyName.split('.').reduce((prev: any, curr: string) => prev[curr], row);
+
+    if (!columnProperties['type']) {
+      return value;
+    }
+
+    // Formatting cell values
+    if (columnProperties['type'] == 'text') {
+      value = value.substring(0, columnProperties['length'] || (value.length));
+    }
+    else if (columnProperties['type'] == 'number') {
+      value = parseFloat(value).toFixed(columnProperties['fraction'] || 0);
+      value = value.toString();
+    }
+
+    return value;
   }
 
   public cellClick(row: any, column: any): void {
@@ -239,9 +255,9 @@ export class NgTableComponent {
     this.selectedRecords.emit(records);
   }
 
-  public reset(){
-      this.disabledRowIndexes = [];
-      this.selectedRowIndexes = [];
+  public reset() {
+    this.disabledRowIndexes = [];
+    this.selectedRowIndexes = [];
   }
 
   // Editable cells
@@ -249,7 +265,7 @@ export class NgTableComponent {
 
   public valueChanged(value: any, propertyName: string, rowIndex: number) {
     this.rows[rowIndex][propertyName] = value;
-    this.valueChanges.emit({'value': value, 'property':propertyName, 'row':this.rows[rowIndex]});
+    this.valueChanges.emit({ 'value': value, 'property': propertyName, 'row': this.rows[rowIndex] });
   }
 
 }

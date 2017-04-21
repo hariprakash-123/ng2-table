@@ -64,7 +64,9 @@ Follow me [![twitter](https://img.shields.io/twitter/follow/valorkin.svg?style=s
     - `links` (array of strings containing the links to display) - Contains the links that need to be shown. If this is setup, then the title of the column must be "Actions". Please refer to
       the example to see how its done
     - `edit` (`boolean`) - Editable 
-    - `type` (`string`) - Type of input of editable cell
+    - `type` (`string`) - `(text|number)` Type of input of editable cell or type of display type of cell
+    - `length`(`number`)- Defines length of no of characters to be shown
+    - `farction` (`number`) - Defines no of decimal points
 
 ### Outputs (Events)
 

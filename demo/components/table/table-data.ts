@@ -5,7 +5,7 @@ export const TableData:Array<any> = [
     'office': 'Croatia',
     'ext': `<strong>0839</strong>`,
     'startDate': '2015/08/19',
-    'salary': 208.178,
+    'salary': 208.178213123,
     'additional_info': {'city': 'Busan'}
   }, {
     'name': 'Pearl Crosby',
@@ -13,7 +13,7 @@ export const TableData:Array<any> = [
     'office': 'Cambodia',
     'ext': `<strong>8262</strong>`,
     'startDate': '2014/10/08',
-    'salary': 114.367
+    'salary': 114.3673322
   }, {
     'name': 'Colette Foley',
     'position': 'Lorem Inc.',
