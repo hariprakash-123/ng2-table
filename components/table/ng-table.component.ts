@@ -54,7 +54,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
             <td *ngIf="column.title === 'Actions'">
                 <div class="input-group-btn">
                   <button [disabled]="row.is_disabled" class="actions-button btn {{link.mainClass}}" *ngFor="let link of column.links" title="{{ link.name }}"
-                    (click)="handleLinks(link.name, row, column)">
+                    (click)="handleLinks(link.name, row, column)" [hidden]="checkIsAvailable(row, link)">
                     <i *ngIf="link.iconClass!=''" class="{{link.iconClass}}"></i>
                     <span *ngIf="link.iconClass==''">{{link.name}}</span>
                   </button>
@@ -181,6 +181,15 @@ export class NgTableComponent {
 
   public handleLinks(action: string, row: any, column: any): void {
     this.linkClicked.emit({ action, row, column });
+  }
+   
+   public checkIsAvailable(row:any, link:any):boolean {
+    let result = false;
+    if(row.hasOwnProperty('links_to_show')) {
+      let links = row['links_to_show'];
+      result =  links.indexOf(link.name) == -1;
+    }
+    return result;
   }
 
   // Multi select configs
