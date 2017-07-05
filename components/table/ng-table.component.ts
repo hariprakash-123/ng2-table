@@ -25,6 +25,8 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
       </thead>
       <tbody>
       <tr *ngIf="showFilterRow" class="search-title-section">
+        <td *ngIf="config['multiSelect']"></td>
+
         <ng-container *ngFor="let column of columns">
           <td *ngIf="column.title != 'Actions'"> 
              <input *ngIf="column.filtering && column.filtering.inputType == 'text'" placeholder="{{column.filtering.placeholder}}"
