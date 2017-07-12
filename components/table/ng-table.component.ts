@@ -51,7 +51,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
           <ng-container *ngFor="let column of columns">
             <td (click)="cellClick(row, column.name)" *ngIf="column.title != 'Actions' && !column.edit" [innerHtml]="sanitize(getData(row, column))"></td>
             <td *ngIf="column.edit">
-                <input (keyup)="valueChanged($event.target.value, column.name, i)" (change)="valueChanged($event.target.value, column.name, i)" [type]="column.type" [value]="getData(row, column)" />
+                <input (keyup)="valueChanged($event.target.value, column.name, i)" (change)="valueChanged($event.target.value, column.name, i)" [type]="column.type" [value]="getData(row, column, true)" />
             </td>
             <td *ngIf="column.title === 'Actions'">
                 <div class="input-group-btn">
@@ -157,11 +157,11 @@ export class NgTableComponent {
     this.tableChanged.emit({ sorting: this.configColumns });
   }
 
-  public getData(row: any, columnProperties: any): string {
+  public getData(row: any, columnProperties: any, dontFormat?: false): string {
     let propertyName: string = columnProperties['name'];
     let value: any = propertyName.split('.').reduce((prev: any, curr: string) => prev[curr], row);
 
-    if (!columnProperties['type']) {
+    if (!columnProperties['type'] || dontFormat) {
       return value;
     }
 
