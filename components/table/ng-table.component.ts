@@ -15,7 +15,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
               (sortChanged)="onChangeTable($event)" ngClass="{{column.className || ''}}">
                 {{column.title}}
                 <i *ngIf="config && column.sort" class="pull-right fa"
-                  [ngClass]="{'fa-chevron-down': column.sort === 'desc', 'fa-chevron-up': column.sort === 'asc'}"></i>
+                  [ngClass]="{'fa-sort-desc': column.sort === 'desc', 'fa-sort-asc': column.sort === 'asc', 'fa-sort': column.sort != 'desc' && column.sort != 'asc' }"></i>
               </th>
               <th *ngIf="column.title === 'Actions'" ngClass="{{ column.className || '' }}">
                 {{ column.title }}
@@ -140,7 +140,7 @@ export class NgTableComponent {
     let sortColumns: Array<any> = [];
 
     this.columns.forEach((column: any) => {
-      if (column.sort) {
+      if (column.sort == 'asc' || column.sort == 'desc') {
         sortColumns.push(column);
       }
     });
@@ -149,11 +149,6 @@ export class NgTableComponent {
   }
 
   public onChangeTable(column: any): void {
-    this._columns.forEach((col: any) => {
-      if (col.name !== column.name && col.sort !== false) {
-        col.sort = '';
-      }
-    });
     this.tableChanged.emit({ sorting: this.configColumns });
   }
 
