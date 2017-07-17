@@ -14,7 +14,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
               <th *ngIf="column.title != 'Actions'" [ngTableSorting]="config" [column]="column" 
               (sortChanged)="onChangeTable($event)" ngClass="{{column.className || ''}}">
                 {{column.title}}
-                <i *ngIf="config && column.sort" class="pull-right fa"
+                <i *ngIf="config && column.sort !== false" class="pull-right fa"
                   [ngClass]="{'fa-sort-desc': column.sort === 'desc', 'fa-sort-asc': column.sort === 'asc', 'fa-sort': column.sort != 'desc' && column.sort != 'asc' }"></i>
               </th>
               <th *ngIf="column.title === 'Actions'" ngClass="{{ column.className || '' }}">
