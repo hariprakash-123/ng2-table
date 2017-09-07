@@ -33,6 +33,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
                    [ngTableFiltering]="column.filtering"
                    class="form-control"
                    style="width: auto;"
+                  [value]="column.filtering.filterString"
                   (tableChanged)="onChangeTable(config)"/>
                   
             <select [ngTableFiltering]="column.filtering" class="form-control"
