@@ -39,7 +39,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
             <select [ngTableFiltering]="column.filtering" class="form-control"
              (tableChanged)="onChangeTable(config)" 
              *ngIf="column.filtering && column.filtering.inputType == 'select'">
-                <option *ngFor="let obj of column.filtering.options" [value]="obj.id">{{obj.value}}</option>
+                <option *ngFor="let obj of column.filtering.options" [selected]="column.filtering.filterString == obj.id" [value]="obj.id">{{obj.value}}</option>
             </select>
           </td>
           <td *ngIf="column.title === 'Actions'">
