@@ -55,14 +55,18 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
                 <input (keyup)="valueChanged($event.target.value, column.name, i)" (change)="valueChanged($event.target.value, column.name, i)" [type]="column.type" [value]="getData(row, column, true)" />
             </td>
             <td *ngIf="column.title === 'Actions'">
-                <div class="input-group-btn">
-                  <button [disabled]="row.is_disabled" class="actions-button btn {{link.mainClass}}" *ngFor="let link of column.links" title="{{ link.name }}"
-                    (click)="handleLinks(link.name, row, column)" [hidden]="checkIsAvailable(row, link)">
-                    <i *ngIf="link.iconClass!=''" class="{{link.iconClass}}"></i>
-                    <span *ngIf="link.iconClass==''">{{link.name}}</span>
-                  </button>
-                </div>
-            </td>
+              <ng-container *ngFor="let link of column.links">
+                <ng-container *ngIf="!checkIsAvailable(row, link)">
+                   <div class="input-group-btn">
+                     <button [disabled]="row.is_disabled" class="actions-button btn {{link.mainClass}}" title="{{ link.name }}"
+                       (click)="handleLinks(link.name, row, column)">
+                       <i *ngIf="link.iconClass!=''" class="{{link.iconClass}}"></i>
+                       <span *ngIf="link.iconClass==''">{{link.name}}</span>
+                     </button>
+                   </div>
+                </ng-container>
+              </ng-container>
+           </td>
           </ng-container>
         </tr>
       </tbody>
